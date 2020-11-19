@@ -16,17 +16,17 @@ var evHook = require('./hooks/ev-hook.js');
 
 module.exports = h;
 
-function h(tagName, properties, children) {
+function h({elementName, attributes, children}) {
     var childNodes = [];
     var tag, props, key, namespace;
 
-    if (!children && isChildren(properties)) {
-        children = properties;
+    if (!children && isChildren(attributes)) {
+        children = attributes;
         props = {};
     }
 
-    props = props || properties || {};
-    tag = parseTag(tagName, props);
+    props = props || attributes || {};
+    tag = parseTag(elementName, props);
 
     // support keys
     if (props.hasOwnProperty('key')) {
@@ -52,8 +52,8 @@ function h(tagName, properties, children) {
                 expected: 'String',
                 received: typeof props.value,
                 Vnode: {
-                    tagName: tag,
-                    properties: props
+                    elementName: tag,
+                    attributes: props
                 }
             });
         }
@@ -87,8 +87,8 @@ function addChild(c, childNodes, tag, props) {
         throw UnexpectedVirtualElement({
             foreignObject: c,
             parentVnode: {
-                tagName: tag,
-                properties: props
+                elementName: tag,
+                attributes: props
             }
         });
     }

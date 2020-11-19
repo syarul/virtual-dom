@@ -10,7 +10,7 @@ var handleThunk = require("../vnode/handle-thunk.js")
 module.exports = createElement
 
 function createElement(vnode, opts) {
-    var doc = opts ? opts.document || document : document
+    var doc = opts ? opts.document || document : window.document
     var warn = opts ? opts.warn : null
 
     vnode = handleThunk(vnode).a
