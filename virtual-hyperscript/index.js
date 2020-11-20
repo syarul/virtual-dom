@@ -58,6 +58,17 @@ function h({elementName, attributes, children, context}) {
             });
         }
         props.value = softSetHook(props.value);
+
+        var onchange = props.hasOwnProperty('onChange') || props.hasOwnProperty('onchange')
+
+        // input onchange polyfill
+        if (onchange) {
+            var fn = props['onChange'] || props['onchange']
+            props['onkeyup'] = fn
+            props['onblur'] = fn
+            delete props['onChange']
+            delete props['onchange']
+        }
     }
 
     transformProperties(props);
