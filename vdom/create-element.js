@@ -9,7 +9,7 @@ var handleThunk = require("../vnode/handle-thunk.js")
 
 module.exports = createElement
 
-function createElement(vnode, opts) {
+function createElement(vnode, opts, register) {
     var doc = opts ? opts.document || document : window.document
     var warn = opts ? opts.warn : null
 
@@ -30,13 +30,17 @@ function createElement(vnode, opts) {
         doc.createElement(vnode.tagName) :
         doc.createElementNS(vnode.namespace, vnode.tagName)
 
+    if (vnode.context && typeof register === 'function') {
+        register(vnode.context, node)
+    }
+
     var props = vnode.properties
     applyProperties(node, props)
 
     var children = vnode.children
 
     for (var i = 0; i < children.length; i++) {
-        var childNode = createElement(children[i], opts)
+        var childNode = createElement(children[i], opts, register)
         if (childNode) {
             node.appendChild(childNode)
         }

@@ -16,7 +16,7 @@ var evHook = require('./hooks/ev-hook.js');
 
 module.exports = h;
 
-function h({elementName, attributes, children}) {
+function h({elementName, attributes, children, context}) {
     var childNodes = [];
     var tag, props, key, namespace;
 
@@ -67,7 +67,7 @@ function h({elementName, attributes, children}) {
     }
 
 
-    return new VNode(tag, props, childNodes, key, namespace);
+    return new VNode(tag, props, childNodes, key, namespace, context);
 }
 
 function addChild(c, childNodes, tag, props) {
@@ -108,6 +108,11 @@ function transformProperties(props) {
             if (propName.substr(0, 3) === 'ev-') {
                 // add ev-foo support
                 props[propName] = evHook(value);
+            }
+
+            if (propName.match(/^on[A-Z]/)) {
+                delete props[propName];
+                props[propName.toLowerCase()] = value;
             }
         }
     }

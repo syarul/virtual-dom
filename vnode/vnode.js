@@ -9,7 +9,7 @@ module.exports = VirtualNode
 var noProperties = {}
 var noChildren = []
 
-function VirtualNode(tagName, properties, children, key, namespace) {
+function VirtualNode(tagName, properties, children, key, namespace, context) {
     this.tagName = tagName
     this.properties = properties || noProperties
     this.children = children || noChildren
@@ -35,6 +35,18 @@ function VirtualNode(tagName, properties, children, key, namespace) {
             }
         }
     }
+
+    var newCount = count
+
+    for (var i = 0; i < count; i++) {
+        var child = children[i]
+        if(child.tagName === 'locomotor-fragment'){
+            newCount += (child.children.length - 1)
+            children.splice.apply(children, [i, 1].concat(child.children))
+        }
+    }
+
+    count = newCount
 
     for (var i = 0; i < count; i++) {
         var child = children[i]
@@ -66,6 +78,7 @@ function VirtualNode(tagName, properties, children, key, namespace) {
     this.hasThunks = hasThunks
     this.hooks = hooks
     this.descendantHooks = descendantHooks
+    this.context = context
 }
 
 VirtualNode.prototype.version = version
