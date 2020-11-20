@@ -15,28 +15,46 @@ var act = run => {
 
 function render(count) {
     return h({
-        elementName: 'button',
-        attributes: {
-            style: {
-                padding: '10px'
+        elementName: 'div',
+        attributes: {},
+        children: [{
+            elementName: 'span',
+            attributes: {
+                className: {
+                    0: 'so',
+                    1: 'stonk'
+                },
+                style: {
+                    fontStyle: 'italic'
+                }
             },
-            onclick: () => {
-                count++;
-                var newTree = render(count)
-                var patches = diff(tree, newTree)
-                rootNode = patch(rootNode, patches)
-                tree = newTree
-            }
-        },
-        children: ['count: ', String(count)]
+            children: ['this is italic style']
+        }, {
+            elementName: 'button',
+            attributes: {
+                className: ['foo', 'bar'],
+                style: {
+                    padding: '10px'
+                },
+                onclick: () => {
+                    count++;
+                    var newTree = render(count)
+                    var patches = diff(tree, newTree)
+                    console.log(patches)
+                    patch(rootNode, patches)
+                    tree = newTree
+                }
+            },
+            children: ['count: ', String(count)]
+        }]
     })
 }
 
-document.body.innerHTML = ''
+// document.getElementsById('app').innerHTML = ''
 
 tree = render(count)            
 rootNode = createElement(tree)
-document.body.appendChild(rootNode)
+document.getElementById('app').appendChild(rootNode)
 
 act(() => {
     count++

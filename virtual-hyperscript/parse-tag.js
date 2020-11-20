@@ -21,7 +21,7 @@ function parseTag(tag, props) {
         tagName = 'DIV';
     }
 
-    var classes, part, type, i;
+    var classes = [], part, type, i;
 
     for (i = 0; i < tagParts.length; i++) {
         part = tagParts[i];
@@ -44,10 +44,21 @@ function parseTag(tag, props) {
 
     if (classes) {
         if (props.className) {
-            classes.push(props.className);
+            if(Array.isArray(props.className)){
+                classes = classes.concat(props.className);
+            } else if(typeof props.className === 'object'){
+                for(var attr in props.className) {
+                    classes.push(props.className[attr]);
+                }
+            } else {
+                classes.push(props.className);
+            }
         }
 
-        props.className = classes.join(' ');
+        if(classes.length > 0){
+            props.className = classes.join(' ') ;
+        }
+
     }
 
     return props.namespace ? tagName : tagName.toUpperCase();

@@ -81,6 +81,8 @@ function addChild(c, childNodes, tag, props) {
         for (var i = 0; i < c.length; i++) {
             addChild(c[i], childNodes, tag, props);
         }
+    } else if(typeof c === 'object' && c.hasOwnProperty('elementName')){
+        childNodes.push(h(c));
     } else if (c === null || c === undefined) {
         return;
     } else {
