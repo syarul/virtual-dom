@@ -12,6 +12,14 @@ function parseTag(tag, props) {
         return 'DIV';
     }
 
+    if(tag === 'Locomotor.Fragment') {
+        return 'locomotor-fragment'
+    }
+
+    if (tag === 'Locomotor.Provider') {
+        return 'locomotor-provider'
+    }
+
     var noId = !(props.hasOwnProperty('id'));
 
     var tagParts = split(tag, classIdSplit);
